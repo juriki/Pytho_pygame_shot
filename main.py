@@ -2,7 +2,7 @@ import pygame
 import random
 import time
 
-
+print(5%2)
 class Enemy:
     def __init__(self, win, enemypos=None):
         self.x = random.randint(10, 455)
@@ -28,6 +28,7 @@ class Enemy:
             self.x -= 4
             if self.x <= 10:
                 self.right = True
+        return self.x, self.y
 
 
     def posittion(self, yp, xp):
@@ -51,9 +52,13 @@ class Enemy:
             self.x = random.randint(10, 455)
             self.y = random.randint(10, 250)
             self.enemy_color = (255, 0, 0)
+            print(self.x, "<---x pos NEW  y pos--->", self.y)
             self.bum = -1
             return False
         return False
+
+    def enemy_shot(self):
+        pass
 
 
 class Bullet:
@@ -63,10 +68,16 @@ class Bullet:
         self.y = y
 
 
-    def shottiing(self):
-        if self.y > 10:
+    def shottiing(self, enemy=None):
+        """ Выстрел Пули если enemy == None,(По умолчанию вверч) то пуля летит вверх, иначе вниз"""
+        if enemy==None and self.y > 10:
             pygame.draw.circle(win, (255, 255, 0), (self.x + 20, self.y), 4)
             self.y = self.y-6
+        else:
+            pygame.draw.circle(win, (255, 255, 0), (self.x + 20, self.y), 4)
+            self.y = self.y + 6
+            if self.y >=550:
+                return True
 
     def bullet_posittion(self):
         return self.y, self.x
@@ -102,6 +113,7 @@ game_time = 0
 run = True
 speed = 6
 bull = []
+bull_enemy = [0,0,0,0]
 
 en = [Enemy(win), Enemy(win), Enemy(win), Enemy(win)]
 pl = Player()
@@ -122,9 +134,8 @@ def shot_or_not(bull, en):
                     if en[j].bumbum():
                         del en[j]
                         if len(en) == 0:
-                            print("You Win The Game Ошибок было --->")
+                            print("You Win The Game")
                             time.sleep(0.5)
-                            run = False
                             return False
             else:
                 bull.append(None)
@@ -170,12 +181,21 @@ while run:
     win.blit(bg2, (0, 0))
     for k in range(len(en)):
         en[k].drew()
+        if bull_enemy[k] == 0 and (random.randint(1, 100)%25) == 0:
+            bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
+            print("Added",len(bull_enemy))
     pl.pleyer_drew()
     player = pl.player_moving()
 
 # Полет пули проверка на поподание
     if not shot_or_not(bull, en):
         run = False
+    for im in range(4):
+        if bull_enemy[im] == 0:
+            continue
+        bull_enemy[im].shottiing(1)
+        if bull_enemy[im].shottiing(1):
+            bull_enemy[im] = 0
 
     pygame.display.update()
 
