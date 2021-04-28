@@ -90,24 +90,49 @@ class Player:
         return self.x, self.y
 
 
+
+
 win_high = 500
 win_weidth = 500
-bg2 = pygame.image.load("cosmos.jpg")
+bg2 = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/cosmos.jpg")
 win = pygame.display.set_mode((win_high, win_weidth))
 pygame.display.set_caption("Shot!")
 stop_time = 0
 game_time = 0
-problem = 0
 run = True
 speed = 6
-
 bull = []
 
 en = [Enemy(win), Enemy(win), Enemy(win), Enemy(win)]
 pl = Player()
 
-for i in range(4):
-    pass
+def shot_or_not(bull, en):
+    try:
+        for i in range(len(bull)):
+            if bull[i] == None:
+                bull.pop(i)
+            elif bull[i].y > 10:
+                bull[i].shottiing()
+                for j in range(len(en)):
+                    ax, ay = bull[i].bullet_posittion()
+                    if not en[j].posittion(ax, ay):
+                        continue
+                    del bull[i]
+                    en[j].bumbum()
+                    if en[j].bumbum():
+                        del en[j]
+                        if len(en) == 0:
+                            print("You Win The Game Ошибок было --->")
+                            time.sleep(0.5)
+                            run = False
+                            return False
+            else:
+                bull.append(None)
+                del bull[i]
+
+    except IndexError:
+        bull.append(None)
+    return True
 
 
 while run:
@@ -149,31 +174,8 @@ while run:
     player = pl.player_moving()
 
 # Полет пули проверка на поподание
-    try:
-        for i in range(len(bull)):
-            if bull[i] == None:
-                bull.pop(i)
-            elif bull[i].y > 10:
-                bull[i].shottiing()
-                for j in range(len(en)):
-                    ax, ay = bull[i].bullet_posittion()
-                    if not en[j].posittion(ax, ay):
-                        continue
-                    del bull[i]
-                    en[j].bumbum()
-                    if en[j].bumbum():
-                        del en[j]
-                        if len(en) == 0:
-                            print("You Win The Game Ошибок было --->", problem)
-                            time.sleep(0.5)
-                            run = False
-            else:
-                bull.append(None)
-                del bull[i]
-
-    except IndexError:
-        problem += 1
-        bull.append(None)
+    if not shot_or_not(bull, en):
+        run = False
 
     pygame.display.update()
 
