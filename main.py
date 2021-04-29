@@ -2,7 +2,6 @@ import pygame
 import random
 import time
 
-print(5%2)
 class Enemy:
     def __init__(self, win, enemypos=None):
         self.x = random.randint(10, 455)
@@ -21,11 +20,11 @@ class Enemy:
         """Рисуем врога  и двигаем его"""
         pygame.draw.rect(self.win, self.enemy_color, (self.x, self.y, self.height, self.width))
         if self.right == True:
-            self.x += 4
+            self.x += 3
             if self.x >= 460:
                 self.right = False
         elif self.right == False:
-            self.x -= 4
+            self.x -= 3
             if self.x <= 10:
                 self.right = True
         return self.x, self.y
@@ -71,27 +70,39 @@ class Bullet:
     def shottiing(self, enemy=None):
         """ Выстрел Пули если enemy == None,(По умолчанию вверч) то пуля летит вверх, иначе вниз"""
         if enemy==None and self.y > 10:
-            pygame.draw.circle(win, (255, 255, 0), (self.x + 20, self.y), 4)
+            pygame.draw.circle(win, [255, 99, 71], (self.x + 20, self.y), 4)
             self.y = self.y-6
         else:
-            pygame.draw.circle(win, (255, 255, 0), (self.x + 20, self.y), 4)
+            pygame.draw.circle(win, (124,252,0), (self.x + 20, self.y+45), 4)
             self.y = self.y + 6
             if self.y >=550:
                 return True
 
+    def bullet_posittion1(self, position_to_kii):
+        if self.x >= position_to_kii[0]-20 and self.x <= position_to_kii[0]+20:
+            if self.y >= position_to_kii[1] - 30 and self.y <= position_to_kii[1] + 30:
+                return True
+        return False
+
     def bullet_posittion(self):
-        return self.y, self.x
+        return self.x, self.y
 
 
-class Player:
+class Player(Bullet):
 
     def __init__(self):
         self.x = 200
         self.y = 400
+        self.boom = 0
 
 
     def pleyer_drew(self):
-        pygame.draw.rect(win, (0, 255, 0), (self.x, self.y, 40, 60))
+        if self.boom <= 4:
+            pygame.draw.rect(win, (0, 255, 0), (self.x, self.y, 40, 60))
+        elif self.boom <=8:
+            pygame.draw.rect(win, (255, 255, 0), (self.x, self.y, 40, 60))
+        elif self.boom <= 11:
+            pygame.draw.rect(win, (255, 0, 0), (self.x, self.y, 40, 60))
 
     def player_moving(self, x=None, y=None):
         if x:
@@ -99,6 +110,15 @@ class Player:
         if y:
             self.y += y
         return self.x, self.y
+
+    def player_boom(self):
+            self.boom+=1
+            if self.boom <=11:
+                return True
+            else:
+                print("GAME OVER YOU LOOS")
+                return False
+
 
 
 
@@ -151,7 +171,7 @@ while run:
     pygame.time.delay(30)
     game_time = int(time.time()) - int(game_time)
     if int(game_time) == 50:
-        print("Time over Ошибок было --->", problem)
+        print("Time over Ошибок было --->")
         run = False
     for evnen in pygame.event.get():
         # Проверка на выход из игры
@@ -181,9 +201,8 @@ while run:
     win.blit(bg2, (0, 0))
     for k in range(len(en)):
         en[k].drew()
-        if bull_enemy[k] == 0 and (random.randint(1, 100)%25) == 0:
+        if bull_enemy[k] == 0 and (random.randint(1, 100)%20) == 0:
             bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
-            print("Added",len(bull_enemy))
     pl.pleyer_drew()
     player = pl.player_moving()
 
@@ -191,11 +210,17 @@ while run:
     if not shot_or_not(bull, en):
         run = False
     for im in range(4):
-        if bull_enemy[im] == 0:
+        try:
+            if bull_enemy[im] == 0:
+                continue
+            bull_enemy[im].shottiing(1)
+            if bull_enemy[im].shottiing(1):
+                bull_enemy[im] = 0
+            if bull_enemy[im].bullet_posittion1(pl.player_moving()):
+                run= pl.player_boom()
+                bull_enemy[im] = 0
+        except AttributeError:
             continue
-        bull_enemy[im].shottiing(1)
-        if bull_enemy[im].shottiing(1):
-            bull_enemy[im] = 0
 
     pygame.display.update()
 
