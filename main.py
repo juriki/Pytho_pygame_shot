@@ -151,7 +151,8 @@ def shot_or_not(bull, en):
                     if bull[i].bullet_posittion1(en[j].enemy_posreturn()):
                         en[j].bumbum()
                         del bull[i]
-#TODO пофиксити смерт врага
+                        if en[j].bumbum():
+                            del en[j]
                     if len(en) == 0:
                         print("You Win The Game")
                         time.sleep(0.5)
