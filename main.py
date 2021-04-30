@@ -30,11 +30,12 @@ class Enemy:
         return self.x, self.y
 
 
-    def posittion(self, yp, xp):
+    def enemy_position(self, yp, xp):
         """Возврашаем место положение врага на экране"""
+#         print(xp ,"<---x enemy_poistion() y--->",yp)
         if yp <= self.y+30:
                 if xp >= self.x-20 and xp <= self.x+40:
-                    return True
+                    return
         else:
             return False
 
@@ -56,8 +57,8 @@ class Enemy:
             return False
         return False
 
-    def enemy_shot(self):
-        pass
+    def enemy_posreturn(self):
+        return self.x ,self.y
 
 
 class Bullet:
@@ -73,7 +74,7 @@ class Bullet:
             pygame.draw.circle(win, [255, 99, 71], (self.x + 20, self.y), 4)
             self.y = self.y-6
         else:
-            pygame.draw.circle(win, (124,252,0), (self.x + 20, self.y+45), 4)
+            pygame.draw.circle(win, (124,252,0), (self.x + 20, self.y), 4)
             self.y = self.y + 6
             if self.y >=550:
                 return True
@@ -85,6 +86,7 @@ class Bullet:
         return False
 
     def bullet_posittion(self):
+        """Возврат меспта положения пули"""
         return self.x, self.y
 
 
@@ -146,17 +148,16 @@ def shot_or_not(bull, en):
             elif bull[i].y > 10:
                 bull[i].shottiing()
                 for j in range(len(en)):
-                    ax, ay = bull[i].bullet_posittion()
-                    if not en[j].posittion(ax, ay):
+                    if bull[i].bullet_posittion1(en[j].enemy_posreturn()):
+                        en[j].bumbum()
+                        del bull[i]
+#TODO пофиксити смерт врага
+                    if len(en) == 0:
+                        print("You Win The Game")
+                        time.sleep(0.5)
+                        return False
+                    else:
                         continue
-                    del bull[i]
-                    en[j].bumbum()
-                    if en[j].bumbum():
-                        del en[j]
-                        if len(en) == 0:
-                            print("You Win The Game")
-                            time.sleep(0.5)
-                            return False
             else:
                 bull.append(None)
                 del bull[i]
