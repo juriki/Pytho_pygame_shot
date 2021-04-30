@@ -32,9 +32,8 @@ class Enemy:
 
     def enemy_position(self, yp, xp):
         """Возврашаем место положение врага на экране"""
-#         print(xp ,"<---x enemy_poistion() y--->",yp)
         if yp <= self.y+30:
-                if xp >= self.x-20 and xp <= self.x+40:
+                if xp >= self.x-20 and xp <= self.x+25:
                     return
         else:
             return False
@@ -81,7 +80,7 @@ class Bullet:
 
     def bullet_posittion1(self, position_to_kii):
         if self.x >= position_to_kii[0]-20 and self.x <= position_to_kii[0]+20:
-            if self.y >= position_to_kii[1] - 30 and self.y <= position_to_kii[1] + 30:
+            if self.y >= position_to_kii[1] - 0 and self.y <= position_to_kii[1] + 30:
                 return True
         return False
 
@@ -170,6 +169,7 @@ def shot_or_not(bull, en):
 
 while run:
     # Главный Цикл игры
+    win.blit(bg2, (0, 0))
     pygame.time.delay(30)
     game_time = int(time.time()) - int(game_time)
     if int(game_time) == 50:
@@ -200,7 +200,6 @@ while run:
         stop_time = time.time()
 
 #  Рисуем  Врагов, экран и Игрока
-    win.blit(bg2, (0, 0))
     for k in range(len(en)):
         en[k].drew()
         if bull_enemy[k] == 0 and (random.randint(1, 100)%20) == 0:
