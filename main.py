@@ -98,11 +98,11 @@ class Player(Bullet):
 
 
     def pleyer_drew(self):
-        if self.boom <= 4:
+        if self.boom <= 3:
             pygame.draw.rect(win, (0, 255, 0), (self.x, self.y, 40, 60))
-        elif self.boom <=8:
+        elif self.boom <=6:
             pygame.draw.rect(win, (255, 255, 0), (self.x, self.y, 40, 60))
-        elif self.boom <= 11:
+        elif self.boom <= 9:
             pygame.draw.rect(win, (255, 0, 0), (self.x, self.y, 40, 60))
 
     def player_moving(self, x=None, y=None):
@@ -114,13 +114,17 @@ class Player(Bullet):
 
     def player_boom(self):
             self.boom+=1
-            if self.boom <=11:
+            if self.boom <9:
                 return True
             else:
                 print("GAME OVER YOU LOOS")
                 return False
 
+    def shots_to_die(self):
+        return 9 - self.boom
 
+
+pygame.font.init()
 win_high = 700
 win_weidth = 500
 bg2 = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/cosmos.jpg")
@@ -137,6 +141,11 @@ bull_enemy = [0,0,0,0]
 en = [Enemy(win), Enemy(win), Enemy(win), Enemy(win)]
 pl = Player()
 
+def screen_text(tekst, size=25,color=(255,255,255)):
+    str(tekst)
+    font = pygame.font.SysFont('timesnewromanbold', size)
+    my_text = font.render(tekst, 1, color)
+    return my_text
 
 
 def shot_or_not(bull, en):
@@ -166,7 +175,6 @@ def shot_or_not(bull, en):
         bull.append(None)
     return True
 
-
 while run:
     # Главный Цикл игры
 
@@ -185,6 +193,7 @@ while run:
     if keys[pygame.K_q]:
         # Выход из игры
         run = False
+        time.sleep(3)
 
     if keys[pygame.K_LEFT] and player[0] >= 10:
             pl.player_moving(-speed)
@@ -223,7 +232,8 @@ while run:
                 bull_enemy[im] = 0
         except AttributeError:
             continue
-
+    win.blit(screen_text(f"{len(en)} Enemys "), (530, 10))
+    win.blit(screen_text(f"you have {pl.shots_to_die()} Lives",22,(255,255,0)), (530, 40))
     pygame.display.update()
 
 
