@@ -121,13 +121,11 @@ class Player(Bullet):
                 return False
 
 
-
-
-
-win_high = 500
+win_high = 700
 win_weidth = 500
 bg2 = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/cosmos.jpg")
 win = pygame.display.set_mode((win_high, win_weidth))
+line = pygame.draw.line(bg2 , (255,255,255), [520, 0],[520, 500], 5)
 pygame.display.set_caption("Shot!")
 stop_time = 0
 game_time = 0
@@ -138,6 +136,8 @@ bull_enemy = [0,0,0,0]
 
 en = [Enemy(win), Enemy(win), Enemy(win), Enemy(win)]
 pl = Player()
+
+
 
 def shot_or_not(bull, en):
     try:
@@ -169,6 +169,7 @@ def shot_or_not(bull, en):
 
 while run:
     # Главный Цикл игры
+
     win.blit(bg2, (0, 0))
     pygame.time.delay(30)
     game_time = int(time.time()) - int(game_time)
@@ -187,11 +188,11 @@ while run:
 
     if keys[pygame.K_LEFT] and player[0] >= 10:
             pl.player_moving(-speed)
-    if keys[pygame.K_RIGHT] and player[0] <= 450:
+    if keys[pygame.K_RIGHT] and player[0] <= 465:
             pl.player_moving(speed)
     if keys[pygame.K_UP] and player[1] >= 320:# and y > 370:
         pl.player_moving(None, -speed)
-    if keys[pygame.K_DOWN]and player[1] <= 420:# and y < 400:
+    if keys[pygame.K_DOWN]and player[1] <= 465:# and y < 400:
         pl.player_moving(None, 10)
 
     if keys[pygame.K_SPACE] and time.time() - stop_time >= 0.3:
