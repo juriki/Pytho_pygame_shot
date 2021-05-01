@@ -133,6 +133,7 @@ line = pygame.draw.line(bg2 , (255,255,255), [520, 0],[520, 500], 5)
 pygame.display.set_caption("Shot!")
 stop_time = 0
 game_time = 0
+text = False
 run = True
 speed = 6
 bull = []
@@ -232,9 +233,11 @@ while run:
                 bull_enemy[im] = 0
         except AttributeError:
             continue
-    win.blit(screen_text(f"{len(en)} Enemys "), (530, 10))
-    win.blit(screen_text(f"you have {pl.shots_to_die()} Lives",22,(255,255,0)), (530, 40))
+    if text:
+        win.blit(screen_text(f"{len(en)} Enemys "), (530, 10))
+        win.blit(screen_text(f"you have {pl.shots_to_die()} Lives",22,(255,255,0)), (530, 40))
     pygame.display.update()
+    text = True
 
 
 pygame.quit()
