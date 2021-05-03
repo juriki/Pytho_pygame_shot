@@ -4,17 +4,19 @@ import time
 
 
 class Enemy:
+    x = random.randint(10, 455)
+    y = random.randint(10, 250)
+    enemy_color = (255, 255, 0)
+    height = 60
+    width = 40
+    bum = -1
+    a_live = 0
+    right = random.randint(0, 1)
+
     def __init__(self, win, enemypos=None):
-        self.x = random.randint(10, 455)
-        self.y = random.randint(10, 250)
-        self.enemy_color = (255, 255, 0)
-        self.height = 60
-        self.width = 40
         self.win = win
-        self.bum = -1
-        self.a_live = 0
-        self.right = random.randint(0, 1)
         print(self.x, "<---x pos   y pos--->", self.y)
+        self.enemy = Enemy(win)
 
 
     def drew(self):
@@ -92,7 +94,7 @@ class Player:
 
 win_high = 500
 win_weidth = 500
-bg2 = pygame.image.load("cosmos.jpg")
+bg2 = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/cosmos.jpg")
 win = pygame.display.set_mode((win_high, win_weidth))
 pygame.display.set_caption("Shot!")
 stop_time = 0
@@ -103,7 +105,7 @@ speed = 6
 
 bull = []
 
-en = [Enemy(win), Enemy(win), Enemy(win), Enemy(win)]
+en = Enemy(win)
 pl = Player()
 
 for i in range(4):
@@ -143,8 +145,9 @@ while run:
 
 #  Рисуем  Врагов, экран и Игрока
     win.blit(bg2, (0, 0))
-    for k in range(len(en)):
-        en[k].drew()
+    for k in range(0):
+        pass
+    en.drew()
     pl.pleyer_drew()
     player = pl.player_moving()
 
