@@ -80,7 +80,7 @@ class Bullet:
 
     def bullet_posittion1(self, position_to_kii):
         if self.x >= position_to_kii[0]-20 and self.x <= position_to_kii[0]+20:
-            if self.y >= position_to_kii[1] - 0 and self.y <= position_to_kii[1] + 30:
+            if self.y >= position_to_kii[1] - 0 and self.y <= position_to_kii[1] + 60:
                 return True
         return False
 
