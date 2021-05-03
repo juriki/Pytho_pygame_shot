@@ -4,24 +4,31 @@ import time
 
 class Enemy:
     def __init__(self, win, enemy_positions):
-        if len(enemy_positions) < 0:
-            position = False
-            for pos in enemy_positions:
+        test_Y = random.randint(10, 250)
+        if len(enemy_positions) > 0:
+            i = 0
+            while i < len(enemy_positions):
+                position = False
+                actual_Y = enemy_positions[i][1]
                 while not position:
-                    tes = random.randint(10, 250)
-                    if enemy_positions[i][1] == tes and enemy_positions[i][1]+25  <= tes:
-                        self.y = tes
+                    if test_Y-45 <= actual_Y and test_Y+45 >= actual_Y:
+                        test_Y = random.randint(10, 250)
+                        i = -1
+                        continue
+                    else:
+                        self.y = test_Y
                         position = True
+                        i+=1
             self.x = random.randint(10, 455)
             self.enemy_color = (255, 255, 0)
             self.height = 60
             self.width = 40
             self.win = win
+            self.speed = random.randint(4, 7)
             self.bum = -1
             self.a_live = 0
             self.right = random.randint(0, 1)
             print(self.x, "<---x pos   y pos--->", self.y)
-            print("NONE")
         else:
             self.x = random.randint(10, 455)
             self.y = random.randint(10, 250)
@@ -29,6 +36,7 @@ class Enemy:
             self.height = 60
             self.width = 40
             self.win = win
+            self.speed = random.randint(3, 7)
             self.bum = -1
             self.a_live = 0
             self.right = random.randint(0, 1)
@@ -39,11 +47,11 @@ class Enemy:
         """Рисуем врога  и двигаем его"""
         pygame.draw.rect(self.win, self.enemy_color, (self.x, self.y, self.height, self.width))
         if self.right == True:
-            self.x += 3
+            self.x += self.speed
             if self.x >= 460:
                 self.right = False
         elif self.right == False:
-            self.x -= 3
+            self.x -= self.speed
             if self.x <= 10:
                 self.right = True
         return self.x, self.y
@@ -208,7 +216,7 @@ while run:
     # Главный Цикл игры
 
     win.blit(bg2, (0, 0))
-    pygame.time.delay(30)
+    pygame.time.delay(20)
     game_time = int(time.time()) - int(game_time)
     if int(game_time) == 50:
         print("Time over Ошибок было --->")
