@@ -4,13 +4,15 @@ import time
 
 class Enemy:
     def __init__(self, win, enemy_positions):
-        if len(enemy_positions) > 0:
+        if len(enemy_positions) < 0:
             position = False
             for pos in enemy_positions:
                 while not position:
-                    position = True
+                    tes = random.randint(10, 250)
+                    if enemy_positions[i][1] == tes and enemy_positions[i][1]+25  <= tes:
+                        self.y = tes
+                        position = True
             self.x = random.randint(10, 455)
-            self.y = random.randint(10, 250)
             self.enemy_color = (255, 255, 0)
             self.height = 60
             self.width = 40
@@ -160,6 +162,7 @@ enemys_poistions = []
 i = 0
 
 while i <4:
+    print(len(enemys_poistions))
     en[i] = Enemy(win, enemys_poistions)
     enemys_poistions.append(en[i].enemy_posreturn())
     i+=1
