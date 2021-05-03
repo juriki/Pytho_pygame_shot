@@ -3,17 +3,34 @@ import random
 import time
 
 class Enemy:
-    def __init__(self, win, enemypos=None):
-        self.x = random.randint(10, 455)
-        self.y = random.randint(10, 250)
-        self.enemy_color = (255, 255, 0)
-        self.height = 60
-        self.width = 40
-        self.win = win
-        self.bum = -1
-        self.a_live = 0
-        self.right = random.randint(0, 1)
-        print(self.x, "<---x pos   y pos--->", self.y)
+    def __init__(self, win, enemy_positions):
+        if len(enemy_positions) > 0:
+            position = False
+            for pos in enemy_positions:
+                while not position:
+                    position = True
+            self.x = random.randint(10, 455)
+            self.y = random.randint(10, 250)
+            self.enemy_color = (255, 255, 0)
+            self.height = 60
+            self.width = 40
+            self.win = win
+            self.bum = -1
+            self.a_live = 0
+            self.right = random.randint(0, 1)
+            print(self.x, "<---x pos   y pos--->", self.y)
+            print("NONE")
+        else:
+            self.x = random.randint(10, 455)
+            self.y = random.randint(10, 250)
+            self.enemy_color = (255, 255, 0)
+            self.height = 60
+            self.width = 40
+            self.win = win
+            self.bum = -1
+            self.a_live = 0
+            self.right = random.randint(0, 1)
+            print(self.x, "<---x pos   y pos--->", self.y)
 
 
     def drew(self):
@@ -137,9 +154,17 @@ text = False
 run = True
 speed = 6
 bull = []
-bull_enemy = [0,0,0,0]
+en = [0,0,0,0]
+bull_enemy = [0,0,0,0,0,0]
+enemys_poistions = []
+i = 0
 
-en = [Enemy(win), Enemy(win), Enemy(win), Enemy(win)]
+while i <4:
+    en[i] = Enemy(win, enemys_poistions)
+    enemys_poistions.append(en[i].enemy_posreturn())
+    i+=1
+
+print(enemys_poistions)
 pl = Player()
 
 def screen_text(tekst, size=25,color=(255,255,255)):
@@ -213,7 +238,7 @@ while run:
 #  Рисуем  Врагов, экран и Игрока
     for k in range(len(en)):
         en[k].drew()
-        if bull_enemy[k] == 0 and (random.randint(1, 100)%20) == 0:
+        if bull_enemy[k] == 0 and (random.randint(1, 100)%10) == 0:
             bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
     pl.pleyer_drew()
     player = pl.player_moving()
@@ -221,7 +246,7 @@ while run:
 # Полет пули проверка на поподание
     if not shot_or_not(bull, en):
         run = False
-    for im in range(4):
+    for im in range(6):
         try:
             if bull_enemy[im] == 0:
                 continue
