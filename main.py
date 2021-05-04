@@ -19,28 +19,18 @@ class Enemy:
                         self.y = test_Y
                         position = True
                         i+=1
-            self.x = random.randint(10, 455)
-            self.enemy_color = (255, 255, 0)
-            self.height = 60
-            self.width = 40
-            self.win = win
-            self.speed = random.randint(4, 7)
-            self.bum = -1
-            self.a_live = 0
-            self.right = random.randint(0, 1)
-            print(self.x, "<---x pos   y pos--->", self.y)
         else:
-            self.x = random.randint(10, 455)
             self.y = random.randint(10, 250)
-            self.enemy_color = (255, 255, 0)
-            self.height = 60
-            self.width = 40
-            self.win = win
-            self.speed = random.randint(3, 7)
-            self.bum = -1
-            self.a_live = 0
-            self.right = random.randint(0, 1)
-            print(self.x, "<---x pos   y pos--->", self.y)
+        self.x = random.randint(10, 455)
+        self.enemy_color = (255, 255, 0)
+        self.height = 60
+        self.width = 40
+        self.win = win
+        self.speed = random.randint(3, 7)
+        self.bum = -1
+        self.a_live = 0
+        self.right = random.randint(0, 1)
+        print(self.x, "<---x pos   y pos--->", self.y)
 
 
     def drew(self):
