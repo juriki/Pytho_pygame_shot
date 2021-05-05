@@ -2,6 +2,24 @@ import pygame
 import random
 import time
 
+pygame.font.init()
+win_high = 700
+win_weidth = 500
+bg2 = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/cosmos.jpg")
+win = pygame.display.set_mode((win_high, win_weidth))
+line = pygame.draw.line(bg2 , (255,255,255), [520, 0],[520, 500], 5)
+pygame.display.set_caption("Shot!")
+stop_time = 0
+game_time = time.time()
+text = False
+run = True
+speed = 6
+bull = []
+en = [0,0,0,0]
+bull_enemy = [0,0,0,0,0,0]
+enemys_poistions = []
+i = 0
+
 class Enemy:
     def __init__(self, win, enemy_positions):
         test_Y = random.randint(10, 250)
@@ -12,7 +30,7 @@ class Enemy:
                 actual_Y = enemy_positions[i][1]
                 while not position:
                     if test_Y-45 <= actual_Y and test_Y+45 >= actual_Y:
-                        test_Y = random.randint(10, 250)
+                        test_Y = random.randint(10, 260)
                         i = -1
                         continue
                     else:
@@ -95,11 +113,13 @@ class Bullet:
             if self.y >=550:
                 return True
 
+
     def bullet_posittion1(self, position_to_kii):
         if self.x >= position_to_kii[0]-20 and self.x <= position_to_kii[0]+20:
             if self.y >= position_to_kii[1] - 0 and self.y <= position_to_kii[1] + 60:
                 return True
         return False
+
 
     def bullet_posittion(self):
         """Возврат меспта положения пули"""
@@ -122,12 +142,14 @@ class Player(Bullet):
         elif self.boom <= 9:
             pygame.draw.rect(win, (255, 0, 0), (self.x, self.y, 40, 60))
 
+
     def player_moving(self, x=None, y=None):
         if x:
             self.x +=x
         if y:
             self.y += y
         return self.x, self.y
+
 
     def player_boom(self):
             self.boom+=1
@@ -141,25 +163,9 @@ class Player(Bullet):
         return 9 - self.boom
 
 
-pygame.font.init()
-win_high = 700
-win_weidth = 500
-bg2 = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/cosmos.jpg")
-win = pygame.display.set_mode((win_high, win_weidth))
-line = pygame.draw.line(bg2 , (255,255,255), [520, 0],[520, 500], 5)
-pygame.display.set_caption("Shot!")
-stop_time = 0
-game_time = 0
-text = False
-run = True
-speed = 6
-bull = []
-en = [0,0,0,0]
-bull_enemy = [0,0,0,0,0,0]
-enemys_poistions = []
-i = 0
 
 while i <4:
+    # Тут создаются обьекты класса "Enemy"
     print(len(enemys_poistions))
     en[i] = Enemy(win, enemys_poistions)
     enemys_poistions.append(en[i].enemy_posreturn())
@@ -202,14 +208,13 @@ def shot_or_not(bull, en):
         bull.append(None)
     return True
 
+
 while run:
     # Главный Цикл игры
-
     win.blit(bg2, (0, 0))
     pygame.time.delay(20)
-    game_time = int(time.time()) - int(game_time)
-    if int(game_time) == 50:
-        print("Time over Ошибок было --->")
+    if int(time.time()) - int(game_time) == 60:
+        print("Time is over")
         run = False
     for evnen in pygame.event.get():
         # Проверка на выход из игры
@@ -262,6 +267,7 @@ while run:
     if text:
         win.blit(screen_text(f"{len(en)} Enemys "), (530, 10))
         win.blit(screen_text(f"you have {pl.shots_to_die()} Lives",22,(255,255,0)), (530, 40))
+        win.blit(screen_text(f"Time to end {67 -(int(time.time()) - int(game_time))} ", 22, (255, 255, 0)), (530, 80))
     pygame.display.update()
     text = True
 
