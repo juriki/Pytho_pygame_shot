@@ -7,6 +7,7 @@ but = Start_window.PopWindow()
 pygame.font.init()
 win_high = 700
 win_weidth = 500
+clock = pygame.time.Clock()
 bg2 = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/cosmos.jpg")
 win = pygame.display.set_mode((win_high, win_weidth))
 line = pygame.draw.line(bg2, (255, 255, 255), [520, 0], [520, 500], 5)
@@ -138,14 +139,18 @@ class Player(Bullet):
         self.x = 200
         self.y = 400
         self.boom = 0
+        self.pumpkin = pygame.image.load(
+            "/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/pumpkin.gif").convert_alpha()
+        self.pumpkin.subsurface((0, 0, 60, 60))
 
     def pleyer_drew(self):
-        if self.boom <= 3:
-            pygame.draw.rect(win, (0, 255, 0), (self.x, self.y, 40, 60))
-        elif self.boom <= 6:
-            pygame.draw.rect(win, (255, 255, 0), (self.x, self.y, 40, 60))
-        elif self.boom <= 9:
-            pygame.draw.rect(win, (255, 0, 0), (self.x, self.y, 40, 60))
+#        if self.boom <= 3:
+        win.blit(self.pumpkin, (self.x, self.y))
+# TODO  add new sprites
+#        elif self.boom <= 6:
+#            pygame.draw.rect(win, (255, 255, 0), (self.x, self.y, 40, 60))
+#        elif self.boom <= 9:
+#            pygame.draw.rect(win, (255, 0, 0), (self.x, self.y, 40, 60))
 
     def player_moving(self, x=None, y=None):
         if x:
@@ -176,6 +181,9 @@ while i < 4:
 print(enemys_poistions)
 pl = Player()
 
+ship = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/New Piskel.gif").convert_alpha()
+ship.subsurface((0, 0, 32, 32))
+
 
 def shot_or_not(bull, en):
     try:
@@ -204,11 +212,13 @@ def shot_or_not(bull, en):
         bull.append(None)
     return True
 
+####################-----------------------------------------------------------##################
 
 while run:
     # Главный Цикл игры
+
         win.blit(bg2, (0, 0))
-        pygame.time.delay(20)
+        clock.tick(50)
         if int(time.time()) - int(game_time) == 60:
             print("Time is over")
             run = False
@@ -218,11 +228,6 @@ while run:
                 run = False
 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_q]:
-            # Выход из игры
-            run = False
-            time.sleep(3)
-
         if keys[pygame.K_LEFT] and player[0] >= 10:
             pl.player_moving(-speed)
         if keys[pygame.K_RIGHT] and player[0] <= 465:
@@ -231,11 +236,13 @@ while run:
             pl.player_moving(None, -speed)
         if keys[pygame.K_DOWN] and player[1] <= 465:  # and y < 400:
             pl.player_moving(None, 10)
-
         if keys[pygame.K_SPACE] and time.time() - stop_time >= 0.3:
             a = Bullet(player[0], player[1])
             bull.append(a)
             stop_time = time.time()
+        if keys[pygame.K_q]:
+            # Выход из игры
+            run = False
 
         #  Рисуем  Врагов, экран и Игрока
         for k in range(len(en)):
