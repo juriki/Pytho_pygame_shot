@@ -22,6 +22,15 @@ bull_enemy = [0, 0, 0, 0, 0, 0]
 enemys_poistions = []
 i = 0
 
+def screen_text(tekst, size=25, color=(255, 255, 255)):
+    str(tekst)
+    font = pygame.font.SysFont('timesnewromanbold', size)
+    my_text = font.render(tekst, 1, color)
+    return my_text
+
+win.blit(screen_text(f"{len(en)} Enemys "), (530, 10))
+
+
 
 class Enemy:
     def __init__(self, win, enemy_positions):
@@ -166,13 +175,6 @@ while i < 4:
 
 print(enemys_poistions)
 pl = Player()
-
-
-def screen_text(tekst, size=25, color=(255, 255, 255)):
-    str(tekst)
-    font = pygame.font.SysFont('timesnewromanbold', size)
-    my_text = font.render(tekst, 1, color)
-    return my_text
 
 
 def shot_or_not(bull, en):
