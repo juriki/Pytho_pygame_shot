@@ -181,9 +181,6 @@ while i < 4:
 print(enemys_poistions)
 pl = Player()
 
-ship = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/New Piskel.gif").convert_alpha()
-ship.subsurface((0, 0, 32, 32))
-
 
 def shot_or_not(bull, en):
     try:
