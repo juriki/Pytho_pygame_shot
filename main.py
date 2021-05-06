@@ -1,13 +1,15 @@
 import pygame
 import random
 import time
+import Start_window
 
+but = Start_window.PopWindow()
 pygame.font.init()
 win_high = 700
 win_weidth = 500
 bg2 = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/cosmos.jpg")
 win = pygame.display.set_mode((win_high, win_weidth))
-line = pygame.draw.line(bg2 , (255,255,255), [520, 0],[520, 500], 5)
+line = pygame.draw.line(bg2, (255, 255, 255), [520, 0], [520, 500], 5)
 pygame.display.set_caption("Shot!")
 stop_time = 0
 game_time = time.time()
@@ -15,10 +17,11 @@ text = False
 run = True
 speed = 6
 bull = []
-en = [0,0,0,0]
-bull_enemy = [0,0,0,0,0,0]
+en = [0, 0, 0, 0]
+bull_enemy = [0, 0, 0, 0, 0, 0]
 enemys_poistions = []
 i = 0
+
 
 class Enemy:
     def __init__(self, win, enemy_positions):
@@ -29,14 +32,14 @@ class Enemy:
                 position = False
                 actual_Y = enemy_positions[i][1]
                 while not position:
-                    if test_Y-45 <= actual_Y and test_Y+45 >= actual_Y:
+                    if test_Y - 45 <= actual_Y and test_Y + 45 >= actual_Y:
                         test_Y = random.randint(10, 260)
                         i = -1
                         continue
                     else:
                         self.y = test_Y
                         position = True
-                        i+=1
+                        i += 1
         else:
             self.y = random.randint(10, 250)
         self.x = random.randint(10, 455)
@@ -49,7 +52,6 @@ class Enemy:
         self.a_live = 0
         self.right = random.randint(0, 1)
         print(self.x, "<---x pos   y pos--->", self.y)
-
 
     def drew(self):
         """Рисуем врога  и двигаем его"""
@@ -64,15 +66,13 @@ class Enemy:
                 self.right = True
         return self.x, self.y
 
-
     def enemy_position(self, yp, xp):
         """Возврашаем место положение врага на экране"""
-        if yp <= self.y+30:
-                if xp >= self.x-20 and xp <= self.x+25:
-                    return
+        if yp <= self.y + 30:
+            if xp >= self.x - 20 and xp <= self.x + 25:
+                return
         else:
             return False
-
 
     def bumbum(self):
         """Каждому врагу дается 2 жизни Тут идет проверка сколько осталось Жить врагу"""
@@ -92,7 +92,7 @@ class Enemy:
         return False
 
     def enemy_posreturn(self):
-        return self.x ,self.y
+        return self.x, self.y
 
 
 class Bullet:
@@ -101,25 +101,22 @@ class Bullet:
         self.x = x
         self.y = y
 
-
     def shottiing(self, enemy=None):
         """ Выстрел Пули если enemy == None,(По умолчанию вверч) то пуля летит вверх, иначе вниз"""
-        if enemy==None and self.y > 10:
+        if enemy == None and self.y > 10:
             pygame.draw.circle(win, [255, 99, 71], (self.x + 20, self.y), 4)
-            self.y = self.y-6
+            self.y = self.y - 6
         else:
-            pygame.draw.circle(win, (124,252,0), (self.x + 20, self.y), 4)
+            pygame.draw.circle(win, (124, 252, 0), (self.x + 20, self.y), 4)
             self.y = self.y + 6
-            if self.y >=550:
+            if self.y >= 550:
                 return True
 
-
     def bullet_posittion1(self, position_to_kii):
-        if self.x >= position_to_kii[0]-20 and self.x <= position_to_kii[0]+20:
+        if self.x >= position_to_kii[0] - 20 and self.x <= position_to_kii[0] + 20:
             if self.y >= position_to_kii[1] - 0 and self.y <= position_to_kii[1] + 60:
                 return True
         return False
-
 
     def bullet_posittion(self):
         """Возврат меспта положения пули"""
@@ -133,48 +130,45 @@ class Player(Bullet):
         self.y = 400
         self.boom = 0
 
-
     def pleyer_drew(self):
         if self.boom <= 3:
             pygame.draw.rect(win, (0, 255, 0), (self.x, self.y, 40, 60))
-        elif self.boom <=6:
+        elif self.boom <= 6:
             pygame.draw.rect(win, (255, 255, 0), (self.x, self.y, 40, 60))
         elif self.boom <= 9:
             pygame.draw.rect(win, (255, 0, 0), (self.x, self.y, 40, 60))
 
-
     def player_moving(self, x=None, y=None):
         if x:
-            self.x +=x
+            self.x += x
         if y:
             self.y += y
         return self.x, self.y
 
-
     def player_boom(self):
-            self.boom+=1
-            if self.boom <9:
-                return True
-            else:
-                print("GAME OVER YOU LOOS")
-                return False
+        self.boom += 1
+        if self.boom < 9:
+            return True
+        else:
+            print("GAME OVER YOU LOOS")
+            return False
 
     def shots_to_die(self):
         return 9 - self.boom
 
 
-
-while i <4:
+while i < 4:
     # Тут создаются обьекты класса "Enemy"
     print(len(enemys_poistions))
     en[i] = Enemy(win, enemys_poistions)
     enemys_poistions.append(en[i].enemy_posreturn())
-    i+=1
+    i += 1
 
 print(enemys_poistions)
 pl = Player()
 
-def screen_text(tekst, size=25,color=(255,255,255)):
+
+def screen_text(tekst, size=25, color=(255, 255, 255)):
     str(tekst)
     font = pygame.font.SysFont('timesnewromanbold', size)
     my_text = font.render(tekst, 1, color)
@@ -211,65 +205,67 @@ def shot_or_not(bull, en):
 
 while run:
     # Главный Цикл игры
-    win.blit(bg2, (0, 0))
-    pygame.time.delay(20)
-    if int(time.time()) - int(game_time) == 60:
-        print("Time is over")
-        run = False
-    for evnen in pygame.event.get():
-        # Проверка на выход из игры
-        if evnen.type == pygame.QUIT:
+        win.blit(bg2, (0, 0))
+        pygame.time.delay(20)
+        if int(time.time()) - int(game_time) == 60:
+            print("Time is over")
             run = False
+        for evnen in pygame.event.get():
+            # Проверка на выход из игры
+            if evnen.type == pygame.QUIT:
+                run = False
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_q]:
-        # Выход из игры
-        run = False
-        time.sleep(3)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_q]:
+            # Выход из игры
+            run = False
+            time.sleep(3)
 
-    if keys[pygame.K_LEFT] and player[0] >= 10:
+        if keys[pygame.K_LEFT] and player[0] >= 10:
             pl.player_moving(-speed)
-    if keys[pygame.K_RIGHT] and player[0] <= 465:
+        if keys[pygame.K_RIGHT] and player[0] <= 465:
             pl.player_moving(speed)
-    if keys[pygame.K_UP] and player[1] >= 320:# and y > 370:
-        pl.player_moving(None, -speed)
-    if keys[pygame.K_DOWN]and player[1] <= 465:# and y < 400:
-        pl.player_moving(None, 10)
+        if keys[pygame.K_UP] and player[1] >= 320:  # and y > 370:
+            pl.player_moving(None, -speed)
+        if keys[pygame.K_DOWN] and player[1] <= 465:  # and y < 400:
+            pl.player_moving(None, 10)
 
-    if keys[pygame.K_SPACE] and time.time() - stop_time >= 0.3:
-        a = Bullet(player[0], player[1])
-        bull.append(a)
-        stop_time = time.time()
+        if keys[pygame.K_SPACE] and time.time() - stop_time >= 0.3:
+            a = Bullet(player[0], player[1])
+            bull.append(a)
+            stop_time = time.time()
 
-#  Рисуем  Врагов, экран и Игрока
-    for k in range(len(en)):
-        en[k].drew()
-        if bull_enemy[k] == 0 and (random.randint(1, 100)%10) == 0:
-            bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
-    pl.pleyer_drew()
-    player = pl.player_moving()
+        #  Рисуем  Врагов, экран и Игрока
+        for k in range(len(en)):
+            en[k].drew()
+            if bull_enemy[k] == 0 and (random.randint(1, 100) % 10) == 0:
+                bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
+        pl.pleyer_drew()
+        player = pl.player_moving()
 
-# Полет пули проверка на поподание
-    if not shot_or_not(bull, en):
-        run = False
-    for im in range(6):
-        try:
-            if bull_enemy[im] == 0:
+        # Полет пули проверка на поподание
+        if not shot_or_not(bull, en):
+            run = False
+        for im in range(6):
+            try:
+                if bull_enemy[im] == 0:
+                    continue
+                bull_enemy[im].shottiing(1)
+                if bull_enemy[im].shottiing(1):
+                    bull_enemy[im] = 0
+                if bull_enemy[im].bullet_posittion1(pl.player_moving()):
+                    run = pl.player_boom()
+                    bull_enemy[im] = 0
+            except AttributeError:
                 continue
-            bull_enemy[im].shottiing(1)
-            if bull_enemy[im].shottiing(1):
-                bull_enemy[im] = 0
-            if bull_enemy[im].bullet_posittion1(pl.player_moving()):
-                run= pl.player_boom()
-                bull_enemy[im] = 0
-        except AttributeError:
-            continue
-    if text:
-        win.blit(screen_text(f"{len(en)} Enemys "), (530, 10))
-        win.blit(screen_text(f"you have {pl.shots_to_die()} Lives",22,(255,255,0)), (530, 40))
-        win.blit(screen_text(f"Time to end {67 -(int(time.time()) - int(game_time))} ", 22, (255, 255, 0)), (530, 80))
-    pygame.display.update()
-    text = True
-
+        if text:
+            win.blit(screen_text(f"{len(en)} Enemys "), (530, 10))
+            win.blit(screen_text(f"you have {pl.shots_to_die()} Lives", 22, (255, 255, 0)), (530, 40))
+            win.blit(screen_text(f"Time to end {67 - (int(time.time()) - int(game_time))} ", 22, (255, 255, 0)),
+                     (530, 80))
+        pygame.display.update()
+        if not text:
+            but.Button()
+            text = True
 
 pygame.quit()
