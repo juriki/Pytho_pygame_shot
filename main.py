@@ -5,10 +5,10 @@ import Start_window
 
 but = Start_window.PopWindow()
 pygame.font.init()
-win_high = 700
-win_weidth = 500
+win_high = 800
+win_weidth = 490
 clock = pygame.time.Clock()
-bg2 = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/cosmos.jpg")
+bg2 = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/trava.jpg")
 win = pygame.display.set_mode((win_high, win_weidth))
 line = pygame.draw.line(bg2, (255, 255, 255), [520, 0], [520, 500], 5)
 pygame.display.set_caption("Shot!")
@@ -61,11 +61,14 @@ class Enemy:
         self.bum = -1
         self.a_live = 0
         self.right = random.randint(0, 1)
+        self.bee = pygame.image.load(
+            "/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/bee.gif").convert_alpha()
+        self.bee.subsurface((0, 0, 60, 60))
         print(self.x, "<---x pos   y pos--->", self.y)
 
     def drew(self):
         """Рисуем врога  и двигаем его"""
-        pygame.draw.rect(self.win, self.enemy_color, (self.x, self.y, self.height, self.width))
+        win.blit(self.bee, (self.x, self.y))
         if self.right == True:
             self.x += self.speed
             if self.x >= 460:
