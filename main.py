@@ -21,6 +21,7 @@ bull = []
 en = [0, 0, 0, 0]
 bull_enemy = [0, 0, 0, 0, 0, 0]
 enemys_poistions = []
+bee_fly = 1
 i = 0
 
 def screen_text(tekst, size=25, color=(255, 255, 255)):
@@ -61,13 +62,13 @@ class Enemy:
         self.bum = -1
         self.a_live = 0
         self.right = random.randint(0, 1)
-        self.bee = pygame.image.load(
-            "/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/bee.gif").convert_alpha()
-        self.bee.subsurface((0, 0, 60, 60))
         print(self.x, "<---x pos   y pos--->", self.y)
 
-    def drew(self):
+    def drew(self, bee_pic):
         """Рисуем врога  и двигаем его"""
+        self.bee = pygame.image.load(
+            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/bee{bee_pic}.png").convert_alpha()
+        self.bee.subsurface((0, 0, 60, 60))
         win.blit(self.bee, (self.x, self.y))
         if self.right == True:
             self.x += self.speed
@@ -211,9 +212,13 @@ def shot_or_not(bull, en):
 
 while run:
     # Главный Цикл игры
+        if bee_fly >= 4:
+            bee_fly = 1
+        else:
+            bee_fly+=1
 
         win.blit(bg2, (0, 0))
-        clock.tick(50)
+        clock.tick(48)
         if int(time.time()) - int(game_time) == 60:
             print("Time is over")
             run = False
@@ -241,9 +246,9 @@ while run:
 
         #  Рисуем  Врагов, экран и Игрока
         for k in range(len(en)):
-            en[k].drew()
+            en[k].drew(bee_fly)
             if bull_enemy[k] == 0 and (random.randint(1, 100) % 10) == 0:
-                bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
+                bull_enemy[k] = Bullet(en[k].drew(bee_fly)[0], en[k].drew(bee_fly)[1])
         pl.pleyer_drew()
         player = pl.player_moving()
 
