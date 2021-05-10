@@ -113,11 +113,14 @@ class Bullet:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.seed = pygame.image.load(
+            "/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/seed.gif").convert_alpha()
+        self.seed.subsurface((0, 0, 40, 40))
 
     def shottiing(self, enemy=None):
         """ Выстрел Пули если enemy == None,(По умолчанию вверч) то пуля летит вверх, иначе вниз"""
         if enemy == None and self.y > 10:
-            pygame.draw.circle(win, [255, 99, 71], (self.x + 20, self.y), 4)
+            win.blit(self.seed, (self.x+20, self.y-5))
             self.y = self.y - 6
         else:
             pygame.draw.circle(win, (124, 252, 0), (self.x + 20, self.y), 4)
@@ -143,8 +146,8 @@ class Player(Bullet):
         self.y = 400
         self.boom = 0
         self.pumpkin = pygame.image.load(
-            "/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/pumpkin.gif").convert_alpha()
-        self.pumpkin.subsurface((0, 0, 60, 60))
+            "/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/Pumpkin.gif").convert_alpha()
+        self.pumpkin.subsurface((0, 0, 90, 90))
 
     def pleyer_drew(self):
 #        if self.boom <= 3:
