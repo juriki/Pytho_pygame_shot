@@ -115,13 +115,13 @@ class Bullet:
             win.blit(self.seed, (self.x+20, self.y-5))
             self.y = self.y - 6
         else:
-            pygame.draw.circle(win, (124, 252, 0), (self.x+20, self.y+30), 4)
+            pygame.draw.circle(win, (124, 252, 0), (self.x+23, self.y+35), 4)
             self.y = self.y + 6
             if self.y >= 550:
                 return True
 
     def bullet_posittion1(self, position_to_kii):
-        if self.x >= position_to_kii[0] - 20 and self.x <= position_to_kii[0] + 20:
+        if self.x >= position_to_kii[0] - 10 and self.x <= position_to_kii[0] + 55:
             if self.y >= position_to_kii[1] - 0 and self.y <= position_to_kii[1] + 60:
                 return True
         return False
