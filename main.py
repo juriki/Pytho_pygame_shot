@@ -94,14 +94,6 @@ class Enemy:
         if self.a_live >= 11:
             # смерть врага
             return True
-        elif self.bum >= 5:
-            # цмена позиции врага
-            self.x = random.randint(10, 455)
-            self.y = random.randint(10, 250)
-            self.enemy_color = (255, 0, 0)
-            print(self.x, "<---x pos NEW  y pos--->", self.y)
-            self.bum = -1
-            return False
         return False
 
     def enemy_posreturn(self):
@@ -123,7 +115,7 @@ class Bullet:
             win.blit(self.seed, (self.x+20, self.y-5))
             self.y = self.y - 6
         else:
-            pygame.draw.circle(win, (124, 252, 0), (self.x + 20, self.y), 4)
+            pygame.draw.circle(win, (124, 252, 0), (self.x+20, self.y+30), 4)
             self.y = self.y + 6
             if self.y >= 550:
                 return True
