@@ -66,12 +66,12 @@ class Enemy:
 
     def drew(self):
         """Рисуем врога  и двигаем его"""
-        if self.bee_fly >= 4:
+        if self.bee_fly >= 8:
             self.bee_fly = 1
         else:
             self.bee_fly += 1
         self.bee = pygame.image.load(
-            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/bee{str(self.bee_fly)}.png").convert_alpha()
+            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/bee/bee{str(self.bee_fly)}.png").convert_alpha()
         self.bee.subsurface((0, 0, 60, 60))
         win.blit(self.bee, (self.x, self.y))
         if self.right == True:
@@ -226,7 +226,7 @@ def shot_or_not(bull, en):
 while run:
     # Главный Цикл игры
         win.blit(bg2, (0, 0))
-        clock.tick(48)
+        clock.tick(60)
         if int(time.time()) - int(game_time) == 60:
             print("Time is over")
             run = False
@@ -242,7 +242,7 @@ while run:
             pl.player_moving(speed)
         if keys[pygame.K_UP] and player[1] >= 320:  # and y > 370:
             pl.player_moving(None, -speed)
-        if keys[pygame.K_DOWN] and player[1] <= 465:  # and y < 400:
+        if keys[pygame.K_DOWN] and player[1] <= 400:
             pl.player_moving(None, 10)
         if keys[pygame.K_SPACE] and time.time() - stop_time >= 0.3:
             a = Bullet(player[0], player[1])
@@ -255,7 +255,7 @@ while run:
         #  Рисуем  Врагов, экран и Игрока
         for k in range(len(en)):
             en[k].drew()
-            if bull_enemy[k] == 0 and (random.randint(1, 100) % 10) == 0:
+            if bull_enemy[k] == 0 and (random.randint(1, 100) % 20) == 0:
                 bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
         pl.pleyer_drew()
         player = pl.player_moving()
