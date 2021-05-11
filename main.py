@@ -21,7 +21,6 @@ bull = []
 en = [0, 0, 0, 0]
 bull_enemy = [0, 0, 0, 0, 0, 0]
 enemys_poistions = []
-bee_fly = 1
 i = 0
 
 def screen_text(tekst, size=25, color=(255, 255, 255)):
@@ -31,7 +30,6 @@ def screen_text(tekst, size=25, color=(255, 255, 255)):
     return my_text
 
 win.blit(screen_text(f"{len(en)} Enemys "), (530, 10))
-
 
 
 class Enemy:
@@ -62,12 +60,18 @@ class Enemy:
         self.bum = -1
         self.a_live = 0
         self.right = random.randint(0, 1)
+        self.bee_fly = random.randint(1,3)
         print(self.x, "<---x pos   y pos--->", self.y)
 
-    def drew(self, bee_pic):
+
+    def drew(self):
         """Рисуем врога  и двигаем его"""
+        if self.bee_fly >= 4:
+            self.bee_fly = 1
+        else:
+            self.bee_fly += 1
         self.bee = pygame.image.load(
-            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/bee{bee_pic}.png").convert_alpha()
+            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/bee{str(self.bee_fly)}.png").convert_alpha()
         self.bee.subsurface((0, 0, 60, 60))
         win.blit(self.bee, (self.x, self.y))
         if self.right == True:
@@ -82,8 +86,8 @@ class Enemy:
 
     def enemy_position(self, yp, xp):
         """Возврашаем место положение врага на экране"""
-        if yp <= self.y + 30:
-            if xp >= self.x - 20 and xp <= self.x + 25:
+        if yp <= self.y + 10:
+            if xp >= self.x - 51 and xp <= self.x + 50:
                 return
         else:
             return False
@@ -122,6 +126,12 @@ class Bullet:
                 return True
 
     def bullet_posittion1(self, position_to_kii):
+        if self.x >= position_to_kii[0] - 15 and self.x <= position_to_kii[0] + 5:
+            if self.y >= position_to_kii[1] - 0 and self.y <= position_to_kii[1] + 40:
+                return True
+        return False
+
+    def bullet_posittion2(self, position_to_kii):
         if self.x >= position_to_kii[0] - 10 and self.x <= position_to_kii[0] + 55:
             if self.y >= position_to_kii[1] - 0 and self.y <= position_to_kii[1] + 60:
                 return True
@@ -137,19 +147,21 @@ class Player(Bullet):
     def __init__(self):
         self.x = 200
         self.y = 400
+        self.file = 1
         self.boom = 0
-        self.pumpkin = pygame.image.load(
-            "/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/Pumpkin.gif").convert_alpha()
-        self.pumpkin.subsurface((0, 0, 90, 90))
 
     def pleyer_drew(self):
-#        if self.boom <= 3:
-        win.blit(self.pumpkin, (self.x, self.y))
-# TODO  add new sprites
-#        elif self.boom <= 6:
-#            pygame.draw.rect(win, (255, 255, 0), (self.x, self.y, 40, 60))
-#        elif self.boom <= 9:
-#            pygame.draw.rect(win, (255, 0, 0), (self.x, self.y, 40, 60))
+        self.pumpkin = pygame.image.load(
+            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/pumpkin{str(self.file)}.png").convert_alpha()
+        self.pumpkin.subsurface((0, 0, 90, 90))
+        if self.boom <= 3:
+            win.blit(self.pumpkin, (self.x, self.y))
+        elif self.boom <= 6:
+            win.blit(self.pumpkin, (self.x, self.y))
+            self.file = 2
+        elif self.boom <= 9:
+            win.blit(self.pumpkin, (self.x, self.y))
+            self.file = 3
 
     def player_moving(self, x=None, y=None):
         if x:
@@ -212,11 +224,6 @@ def shot_or_not(bull, en):
 
 while run:
     # Главный Цикл игры
-        if bee_fly >= 4:
-            bee_fly = 1
-        else:
-            bee_fly+=1
-
         win.blit(bg2, (0, 0))
         clock.tick(48)
         if int(time.time()) - int(game_time) == 60:
@@ -246,9 +253,9 @@ while run:
 
         #  Рисуем  Врагов, экран и Игрока
         for k in range(len(en)):
-            en[k].drew(bee_fly)
+            en[k].drew()
             if bull_enemy[k] == 0 and (random.randint(1, 100) % 10) == 0:
-                bull_enemy[k] = Bullet(en[k].drew(bee_fly)[0], en[k].drew(bee_fly)[1])
+                bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
         pl.pleyer_drew()
         player = pl.player_moving()
 
@@ -262,7 +269,7 @@ while run:
                 bull_enemy[im].shottiing(1)
                 if bull_enemy[im].shottiing(1):
                     bull_enemy[im] = 0
-                if bull_enemy[im].bullet_posittion1(pl.player_moving()):
+                if bull_enemy[im].bullet_posittion2(pl.player_moving()):
                     run = pl.player_boom()
                     bull_enemy[im] = 0
             except AttributeError:
