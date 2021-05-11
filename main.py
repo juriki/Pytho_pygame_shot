@@ -194,6 +194,7 @@ pl = Player()
 
 
 def shot_or_not(bull, en):
+    # пороверка полетапули игрока
     try:
         for i in range(len(bull)):
             if bull[i] == None:
