@@ -2,6 +2,8 @@ import pygame
 import random
 import time
 import Start_window
+import bonus
+
 
 but = Start_window.PopWindow()
 pygame.font.init()
@@ -11,7 +13,6 @@ clock = pygame.time.Clock()
 bg2 = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/trava.jpg")
 win = pygame.display.set_mode((win_high, win_weidth))
 line = pygame.draw.line(bg2, (255, 255, 255), [520, 0], [520, 500], 5)
-pygame.display.set_caption("Shot!")
 stop_time = 0
 game_time = time.time()
 text = False
@@ -189,7 +190,7 @@ while i < 4:
     enemys_poistions.append(en[i].enemy_posreturn())
     i += 1
 
-print(enemys_poistions)
+bonus = bonus.Bonus(win)
 pl = Player()
 
 
@@ -227,6 +228,7 @@ while run:
     # Главный Цикл игры
         win.blit(bg2, (0, 0))
         clock.tick(60)
+        bonus.drew()
         if int(time.time()) - int(game_time) == 60:
             print("Time is over")
             run = False
