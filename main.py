@@ -182,6 +182,12 @@ class Player(Bullet):
     def shots_to_die(self):
         return 9 - self.boom
 
+    def player_posittion(self, position_to_kii):
+        if self.x <= position_to_kii[0]+24 and position_to_kii[0] <= self.x+50:
+            if self.y >= position_to_kii[1] - 0 and self.y <= position_to_kii[1] + 60:
+                return True
+        return False
+
 
 while i < 4:
     # Тут создаются обьекты класса "Enemy"
@@ -228,7 +234,6 @@ while run:
     # Главный Цикл игры
         win.blit(bg2, (0, 0))
         clock.tick(60)
-        bonus.drew()
         if int(time.time()) - int(game_time) == 60:
             print("Time is over")
             run = False
@@ -261,6 +266,7 @@ while run:
                 bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
         pl.pleyer_drew()
         player = pl.player_moving()
+        bonus.drew()
 
         # Полет пули проверка на поподание
         if not shot_or_not(bull, en):
@@ -277,6 +283,11 @@ while run:
                     bull_enemy[im] = 0
             except AttributeError:
                 continue
+
+        if pl.player_posittion(bonus.drew()):
+            bonus.y = -10
+            pl.boom-=1
+
         if text:
             win.blit(screen_text(f"{len(en)} Enemys "), (530, 10))
             win.blit(screen_text(f"you have {pl.shots_to_die()} Lives", 22, (255, 255, 0)), (530, 40))
