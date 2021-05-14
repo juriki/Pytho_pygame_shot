@@ -3,6 +3,7 @@ import random
 
 
 class Bonus:
+    """Класс рисуюший боунсы"""
     def __init__(self, win):
         self.win = win
         self.x = random.randint(10,465)
@@ -13,7 +14,11 @@ class Bonus:
         self.coin.subsurface((0, 0, 60, 60))
 
     def drew(self):
-        if self.bonus_start % 90 == 0:
+        """Тут рисутся монетка """
+        if self.y == -15:
+            self.y = -10
+            self.x = random.randint(10, 465)
+        elif self.bonus_start % 100 == 0:
             self.win.blit(self.coin, (self.x, self.y))
             self.y += 3
             if self.y >= 500:

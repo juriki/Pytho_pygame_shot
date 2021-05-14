@@ -18,6 +18,7 @@ game_time = time.time()
 text = False
 run = True
 speed = 6
+score = 0
 bull = []
 en = [0, 0, 0, 0]
 bull_enemy = [0, 0, 0, 0, 0, 0]
@@ -176,11 +177,16 @@ class Player(Bullet):
         if self.boom < 9:
             return True
         else:
+            win.blit(screen_text("Game Over You Lose", 50, (255, 255, 255)), (50, 250))
             print("GAME OVER YOU LOOS")
             return False
 
     def shots_to_die(self):
-        return 9 - self.boom
+        die = 9 - self.boom
+        if die >= 9:
+            return 9
+        else:
+            return die
 
     def player_posittion(self, position_to_kii):
         if self.x <= position_to_kii[0]+24 and position_to_kii[0] <= self.x+50:
@@ -202,7 +208,7 @@ pl = Player()
 
 
 def shot_or_not(bull, en):
-    # пороверка полетапули игрока
+    # пороверка полета пули игрока
     try:
         for i in range(len(bull)):
             if bull[i] == None:
@@ -212,6 +218,8 @@ def shot_or_not(bull, en):
                 for j in range(len(en)):
                     if bull[i].bullet_posittion1(en[j].enemy_posreturn()):
                         en[j].bumbum()
+                        global score
+                        score+=20
                         del bull[i]
                         if en[j].bumbum():
                             del en[j]
@@ -224,7 +232,6 @@ def shot_or_not(bull, en):
             else:
                 bull.append(None)
                 del bull[i]
-
     except IndexError:
         bull.append(None)
     return True
@@ -236,7 +243,7 @@ while run:
         win.blit(bg2, (0, 0))
         clock.tick(60)
         if int(time.time()) - int(game_time) == 60:
-            print("Time is over")
+            win.blit(screen_text("Time is Over", 50, (255, 255, 255)), (50, 250))
             run = False
         for evnen in pygame.event.get():
             # Проверка на выход из игры
@@ -258,6 +265,7 @@ while run:
             stop_time = time.time()
         if keys[pygame.K_q]:
             # Выход из игры
+            win.blit(screen_text("Game Over you Lose", 50, (255, 255, 255)), (50, 150))
             run = False
 
         #  Рисуем  Врагов, экран и Игрока
@@ -269,8 +277,9 @@ while run:
         player = pl.player_moving()
         bonus.drew()
 
-        # Полет пули проверка на поподание
+        # Полет пули врега проверка на поподание
         if not shot_or_not(bull, en):
+            win.blit(screen_text("You Win the game", 50, (250, 255, 250)), (50, 200))
             run = False
         for im in range(6):
             try:
@@ -286,11 +295,12 @@ while run:
                 continue
 
         if pl.player_posittion(bonus.drew()):
-            bonus.y = -10
+            bonus.y = -15
             pl.boom-=1
 
+
         if text:
-            win.blit(screen_text(f"Score : {0}", 22, (255, 255, 255)), (530, 10))
+            win.blit(screen_text(f"Score : {score}", 22, (255, 255, 255)), (530, 10))
             win.blit(screen_text(f"{len(en)} Enemys ",22, (255, 0, 0)), (530, 40))
             win.blit(screen_text(f"Shots to Die : {pl.shots_to_die()}", 22, (255, 255, 0)), (530, 80))
             win.blit(screen_text(f"Time to end {67 - (int(time.time()) - int(game_time))} ", 22, (255, 255, 0)),
@@ -301,4 +311,5 @@ while run:
             but.Button()
             text = True
 
+time.sleep(5)
 pygame.quit()
