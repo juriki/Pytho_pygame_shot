@@ -290,10 +290,12 @@ while run:
             pl.boom-=1
 
         if text:
-            win.blit(screen_text(f"{len(en)} Enemys "), (530, 10))
-            win.blit(screen_text(f"you have {pl.shots_to_die()} Lives", 22, (255, 255, 0)), (530, 40))
+            win.blit(screen_text(f"Score : {0}", 22, (255, 255, 255)), (530, 10))
+            win.blit(screen_text(f"{len(en)} Enemys ",22, (255, 0, 0)), (530, 40))
+            win.blit(screen_text(f"Shots to Die : {pl.shots_to_die()}", 22, (255, 255, 0)), (530, 80))
             win.blit(screen_text(f"Time to end {67 - (int(time.time()) - int(game_time))} ", 22, (255, 255, 0)),
-                     (530, 80))
+                     (530, 120))
+
         pygame.display.update()
         if not text:
             but.Button()
