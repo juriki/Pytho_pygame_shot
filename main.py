@@ -184,8 +184,9 @@ class Player(Bullet):
 
     def player_posittion(self, position_to_kii):
         if self.x <= position_to_kii[0]+24 and position_to_kii[0] <= self.x+50:
-            if self.y >= position_to_kii[1] - 0 and self.y <= position_to_kii[1] + 60:
+            if self.y >= position_to_kii[1]-50 and self.y <= position_to_kii[1]:
                 return True
+
         return False
 
 

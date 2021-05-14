@@ -22,6 +22,6 @@ class Bonus:
                 self.bonus_start = 13
         else:
             self.bonus_start = random.randint(1, 200)
-        return self.y, self.x
+        return self.x, self.y
 
 
