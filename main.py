@@ -35,6 +35,7 @@ win.blit(screen_text(f"{len(en)} Enemys "), (530, 10))
 
 
 class Enemy:
+    """Класс рисуюший Врага и все что сним свазано"""
     def __init__(self, win, enemy_positions):
         test_Y = random.randint(10, 250)
         if len(enemy_positions) > 0:
@@ -61,26 +62,39 @@ class Enemy:
         self.speed = random.randint(3, 7)
         self.bum = -1
         self.a_live = 0
+        self.is_dead = False
+        self.is_dead_move = 1
         self.right = random.randint(0, 1)
         self.bee_fly = random.randint(1,3)
+        self.bee_down = 1
         print(self.x, "<---x pos   y pos--->", self.y)
 
 
     def drew(self):
-        """Рисуем врога  и двигаем его"""
+        """Рисуем врога  и двигаем его """
         if self.bee_fly >= 8:
             self.bee_fly = 1
-        else:
+        if not self.is_dead:
+        # Проверка живойли Враг
             self.bee_fly += 1
-        self.bee = pygame.image.load(
-            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/bee/bee{str(self.bee_fly)}.png").convert_alpha()
-        self.bee.subsurface((0, 0, 60, 60))
-        win.blit(self.bee, (self.x, self.y))
-        if self.right == True:
+            self.bee = pygame.image.load(
+                    f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/bee/bee{str(self.bee_fly)}.png").convert_alpha()
+            self.bee.subsurface((0, 0, 60, 60))
+            win.blit(self.bee, (self.x, self.y))
+        if self.is_dead:
+        # Проверка живойли враг если подбит то тут он падает
+            self.speed = 8
+            self.bee = pygame.image.load(f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/beedown/bee{str(self.is_dead_move)}.png").convert_alpha()
+            self.bee.subsurface((0, 0, 60, 60))
+            win.blit(self.bee, (self.x, self.y))
+            self.y += self.speed
+            if self.is_dead_move <= 6:
+                self.is_dead_move += 1
+        if self.right == True and self.is_dead_move < 6:
             self.x += self.speed
             if self.x >= 460:
                 self.right = False
-        elif self.right == False:
+        elif self.right == False and self.is_dead_move < 6:
             self.x -= self.speed
             if self.x <= 10:
                 self.right = True
@@ -95,20 +109,21 @@ class Enemy:
             return False
 
     def bumbum(self):
-        """Каждому врагу дается 2 жизни Тут идет проверка сколько осталось Жить врагу"""
+        """Каждому врагу дается 8  поаданий"""
         self.bum += 1
         self.a_live += 1
-        if self.a_live >= 11:
-            # смерть врага
+        if self.a_live >= 7:
+            self.is_dead = True
             return True
         return False
 
     def enemy_posreturn(self):
+        # Возврат места полжения врага
         return self.x, self.y
 
 
 class Bullet:
-
+    """Класс рисуюший Пулю"""
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -144,7 +159,7 @@ class Bullet:
         return self.x, self.y
 
 
-class Player(Bullet):
+class Player:
 
     def __init__(self):
         self.x = 200
@@ -208,7 +223,6 @@ pl = Player()
 
 
 def shot_or_not(bull, en):
-    # пороверка полета пули игрока
     try:
         for i in range(len(bull)):
             if bull[i] == None:
@@ -218,12 +232,8 @@ def shot_or_not(bull, en):
                 for j in range(len(en)):
                     if bull[i].bullet_posittion1(en[j].enemy_posreturn()):
                         en[j].bumbum()
-                        global score
-                        score+=20
                         del bull[i]
-                        if en[j].bumbum():
-                            del en[j]
-                    if len(en) == 0:
+                    elif len(en) == 0:
                         print("You Win The Game")
                         time.sleep(0.5)
                         return False
@@ -232,10 +242,10 @@ def shot_or_not(bull, en):
             else:
                 bull.append(None)
                 del bull[i]
+
     except IndexError:
         bull.append(None)
     return True
-
 ####################-----------------------------------------------------------##################
 
 while run:
@@ -269,16 +279,21 @@ while run:
             run = False
 
         #  Рисуем  Врагов, экран и Игрока
-        for k in range(len(en)):
-            en[k].drew()
-            if bull_enemy[k] == 0 and (random.randint(1, 100) % 20) == 0:
-                bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
+        try:
+            for k in range(len(en)):
+                en[k].drew()
+                if text and en[k].y >=500:
+                    del en[k]
+                if bull_enemy[k] == 0 and (random.randint(1, 100) % 25) == 0:
+                        bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
+        except IndexError:
+            continue
         pl.pleyer_drew()
         player = pl.player_moving()
         bonus.drew()
 
         # Полет пули врега проверка на поподание
-        if not shot_or_not(bull, en):
+        if not shot_or_not(bull, en) or len(en) == 0:
             win.blit(screen_text("You Win the game", 50, (250, 255, 250)), (50, 200))
             run = False
         for im in range(6):
@@ -305,7 +320,6 @@ while run:
             win.blit(screen_text(f"Shots to Die : {pl.shots_to_die()}", 22, (255, 255, 0)), (530, 80))
             win.blit(screen_text(f"Time to end {67 - (int(time.time()) - int(game_time))} ", 22, (255, 255, 0)),
                      (530, 120))
-
         pygame.display.update()
         if not text:
             but.Button()
