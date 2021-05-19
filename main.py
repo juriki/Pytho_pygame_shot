@@ -231,6 +231,8 @@ def shot_or_not(bull, en):
                 bull[i].shottiing()
                 for j in range(len(en)):
                     if bull[i].bullet_posittion1(en[j].enemy_posreturn()):
+                        global score
+                        score += 20
                         en[j].bumbum()
                         del bull[i]
                     elif len(en) == 0:
@@ -263,7 +265,7 @@ while run:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and player[0] >= 10:
             pl.player_moving(-speed)
-        if keys[pygame.K_RIGHT] and player[0] <= 465:
+        if keys[pygame.K_RIGHT] and player[0] <= 450:
             pl.player_moving(speed)
         if keys[pygame.K_UP] and player[1] >= 320:  # and y > 370:
             pl.player_moving(None, -speed)
