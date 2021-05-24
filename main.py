@@ -67,6 +67,8 @@ class Enemy:
         self.right = random.randint(0, 1)
         self.bee_fly = random.randint(1,3)
         self.bee_down = 1
+        self.pos = self.y
+        self.jump_time = 1
         print(self.x, "<---x pos   y pos--->", self.y)
 
 
@@ -76,6 +78,8 @@ class Enemy:
             self.bee_fly = 1
         if not self.is_dead:
         # Проверка живойли Враг
+            if self.y != self.pos and time.time() - self.jump_time >= 0.05: # отрабатываем попадание по врагу
+                self.y = self.pos
             self.bee_fly += 1
             self.bee = pygame.image.load(
                     f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/bee/bee{str(self.bee_fly)}.png").convert_alpha()
@@ -112,6 +116,8 @@ class Enemy:
         """Каждому врагу дается 8  поаданий"""
         self.bum += 1
         self.a_live += 1
+        self.y -=7
+        self.jump_time = time.time()
         if self.a_live >= 7:
             self.is_dead = True
             return True
@@ -160,7 +166,7 @@ class Bullet:
 
 
 class Player:
-
+    """Класс игрока """
     def __init__(self):
         self.x = 200
         self.y = 400
@@ -168,6 +174,7 @@ class Player:
         self.boom = 0
 
     def pleyer_drew(self):
+        """Рисуем игрока"""
         self.pumpkin = pygame.image.load(
             f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/pumpkin{str(self.file)}.png").convert_alpha()
         self.pumpkin.subsurface((0, 0, 90, 90))
