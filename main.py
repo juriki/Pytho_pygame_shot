@@ -72,8 +72,17 @@ class Enemy:
         print(self.x, "<---x pos   y pos--->", self.y)
 
 
+    def enemy_heart(self, pic_num):
+        if pic_num >4:
+            pic_num = 4
+        self.heart = pygame.image.load(
+            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/heart/heart{int(pic_num)}.png").convert_alpha()
+        self.heart.subsurface((0, 0, 32, 32))
+        win.blit(self.heart, (758, self.y))
+
     def drew(self):
         """Рисуем врога  и двигаем его """
+        self.enemy_heart(self.a_live)
         if self.bee_fly >= 8:
             self.bee_fly = 1
         if not self.is_dead:
@@ -118,7 +127,7 @@ class Enemy:
         self.a_live += 1
         self.y -=7
         self.jump_time = time.time()
-        if self.a_live >= 7:
+        if self.a_live >= 4:
             self.is_dead = True
             return True
         return False
@@ -126,6 +135,7 @@ class Enemy:
     def enemy_posreturn(self):
         # Возврат места полжения врага
         return self.x, self.y
+
 
 
 class Bullet:
@@ -324,11 +334,11 @@ while run:
 
 
         if text:
-            win.blit(screen_text(f"Score : {score}", 22, (255, 255, 255)), (530, 10))
-            win.blit(screen_text(f"{len(en)} Enemys ",22, (255, 0, 0)), (530, 40))
-            win.blit(screen_text(f"Shots to Die : {pl.shots_to_die()}", 22, (255, 255, 0)), (530, 80))
+            win.blit(screen_text(f"Score : {score}", 22, (255, 255, 255)), (530, 70))
+            win.blit(screen_text(f"{len(en)} Enemys ",22, (255, 0, 0)), (530, 100))
+            win.blit(screen_text(f"Shots to Die : {pl.shots_to_die()}", 22, (255, 255, 0)), (530, 130))
             win.blit(screen_text(f"Time to end {67 - (int(time.time()) - int(game_time))} ", 22, (255, 255, 0)),
-                     (530, 120))
+                     (530, 160))
         pygame.display.update()
         if not text:
             but.Button()
