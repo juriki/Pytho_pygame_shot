@@ -37,7 +37,7 @@ win.blit(screen_text(f"{len(en)} Enemys "), (530, 10))
 class Enemy:
     """Класс рисуюший Врага и все что сним свазано"""
     def __init__(self, win, enemy_positions):
-        test_Y = random.randint(10, 250)
+        test_Y = random.randint(20, 250)
         if len(enemy_positions) > 0:
             i = 0
             while i < len(enemy_positions):
@@ -53,7 +53,7 @@ class Enemy:
                         position = True
                         i += 1
         else:
-            self.y = random.randint(10, 250)
+            self.y = random.randint(20, 250)
         self.x = random.randint(10, 455)
         self.enemy_color = (255, 255, 0)
         self.height = 60
@@ -78,7 +78,7 @@ class Enemy:
         self.heart = pygame.image.load(
             f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/heart/sprite_{int(pic_num)}.png").convert_alpha()
         self.heart.subsurface((0, 0, 32, 32))
-        win.blit(self.heart, (758, self.pos))
+        win.blit(self.heart, (530, self.pos))
 
     def drew(self):
         """Рисуем врога  и двигаем его """
@@ -181,10 +181,19 @@ class Player:
         self.x = 200
         self.y = 400
         self.file = 1
-        self.boom = 0
+        self.boom = 1
+
+
+    def level(self, cath):
+        level = pygame.image.load(
+            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/playerLevel/level{int(cath)}.png").convert_alpha()
+        level.subsurface((0, 0, 250, 250))
+        win.blit(level, (538, 300))
+
 
     def pleyer_drew(self):
         """Рисуем игрока"""
+        self.level(self.boom)
         self.pumpkin = pygame.image.load(
             f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/pumpkin{str(self.file)}.png").convert_alpha()
         self.pumpkin.subsurface((0, 0, 90, 90))
@@ -193,7 +202,7 @@ class Player:
         elif self.boom <= 6:
             win.blit(self.pumpkin, (self.x, self.y))
             self.file = 2
-        elif self.boom <= 9:
+        elif self.boom <= 10:
             win.blit(self.pumpkin, (self.x, self.y))
             self.file = 3
 
@@ -206,12 +215,14 @@ class Player:
 
     def player_boom(self):
         self.boom += 1
-        if self.boom < 9:
+        if self.boom < 10:
             return True
         else:
             win.blit(screen_text("Game Over You Lose", 50, (255, 255, 255)), (50, 250))
             print("GAME OVER YOU LOOS")
+            pl.level(10)
             return False
+
 
     def shots_to_die(self):
         die = 9 - self.boom
@@ -334,15 +345,14 @@ while run:
 
 
         if text:
-            win.blit(screen_text(f"Score : {score}", 22, (255, 255, 255)), (530, 70))
-            win.blit(screen_text(f"{len(en)} Enemys ",22, (255, 0, 0)), (530, 100))
-            win.blit(screen_text(f"Shots to Die : {pl.shots_to_die()}", 22, (255, 255, 0)), (530, 130))
             win.blit(screen_text(f"Time to end {67 - (int(time.time()) - int(game_time))} ", 22, (255, 255, 0)),
-                     (530, 160))
+                     (600, 10))
+            win.blit(screen_text(f"Score : {score}", 22, (255, 255, 255)), (600, 355))
+            win.blit(screen_text(f"{len(en)} Enemys ",22, (255, 0, 0)), (590, 40))
         pygame.display.update()
         if not text:
             but.Button()
             text = True
-
 time.sleep(5)
 pygame.quit()
+#TODO Падает прога если есть попадание в игрока до того как он успел выстрелить
