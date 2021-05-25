@@ -73,10 +73,10 @@ class Enemy:
 
 
     def enemy_heart(self, pic_num):
-        if pic_num >4:
-            pic_num = 4
+        if pic_num >8:
+            pic_num = 8
         self.heart = pygame.image.load(
-            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/heart/heart{int(pic_num)}.png").convert_alpha()
+            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/heart/sprite_{int(pic_num)}.png").convert_alpha()
         self.heart.subsurface((0, 0, 32, 32))
         win.blit(self.heart, (758, self.y))
 
@@ -127,7 +127,7 @@ class Enemy:
         self.a_live += 1
         self.y -=7
         self.jump_time = time.time()
-        if self.a_live >= 4:
+        if self.a_live >= 8:
             self.is_dead = True
             return True
         return False
