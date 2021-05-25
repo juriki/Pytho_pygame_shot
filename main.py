@@ -78,7 +78,7 @@ class Enemy:
         self.heart = pygame.image.load(
             f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/heart/sprite_{int(pic_num)}.png").convert_alpha()
         self.heart.subsurface((0, 0, 32, 32))
-        win.blit(self.heart, (758, self.y))
+        win.blit(self.heart, (758, self.pos))
 
     def drew(self):
         """Рисуем врога  и двигаем его """
