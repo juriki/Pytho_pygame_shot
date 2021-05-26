@@ -60,7 +60,7 @@ class Enemy:
         self.width = 40
         self.win = win
         self.speed = random.randint(3, 7)
-        self.bum = -1
+        self.bum = 0
         self.a_live = 0
         self.is_dead = False
         self.is_dead_move = 1
@@ -69,20 +69,24 @@ class Enemy:
         self.bee_down = 1
         self.pos = self.y
         self.jump_time = 1
+        self.pic_num = 0
         print(self.x, "<---x pos   y pos--->", self.y)
 
 
-    def enemy_heart(self, pic_num):
-        if pic_num >8:
-            pic_num = 8
+    def enemy_heart(self):
+        if self.bum >8:
+            self.bum = 8
+        elif self.bum == 8:
+            return False
         self.heart = pygame.image.load(
-            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/heart/sprite_{int(pic_num)}.png").convert_alpha()
+            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/heart/sprite_{int(self.bum)}.png").convert_alpha()
         self.heart.subsurface((0, 0, 32, 32))
         win.blit(self.heart, (530, self.pos))
+        return True
 
     def drew(self):
         """Рисуем врога  и двигаем его """
-        self.enemy_heart(self.a_live)
+        self.enemy_heart()
         if self.bee_fly >= 8:
             self.bee_fly = 1
         if not self.is_dead:
@@ -125,7 +129,7 @@ class Enemy:
         """Каждому врагу дается 8  поаданий"""
         self.bum += 1
         self.a_live += 1
-        self.y -=7
+        self.y -=9
         self.jump_time = time.time()
         if self.a_live >= 8:
             self.is_dead = True
@@ -182,18 +186,21 @@ class Player:
         self.y = 400
         self.file = 1
         self.boom = 1
+        self.life = 1
 
 
-    def level(self, cath):
+    def level(self):
+        if self.life < 1:
+            self.life = 1
         level = pygame.image.load(
-            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/playerLevel/level{int(cath)}.png").convert_alpha()
+            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/playerLevel/level{int(self.life)}.png").convert_alpha()
         level.subsurface((0, 0, 250, 250))
         win.blit(level, (538, 300))
 
 
     def pleyer_drew(self):
         """Рисуем игрока"""
-        self.level(self.boom)
+        self.level()
         self.pumpkin = pygame.image.load(
             f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/pumpkin{str(self.file)}.png").convert_alpha()
         self.pumpkin.subsurface((0, 0, 90, 90))
@@ -215,12 +222,13 @@ class Player:
 
     def player_boom(self):
         self.boom += 1
-        if self.boom < 10:
+        self.life +=1
+        if self.boom < 9:
             return True
         else:
             win.blit(screen_text("Game Over You Lose", 50, (255, 255, 255)), (50, 250))
             print("GAME OVER YOU LOOS")
-            pl.level(10)
+            pl.level()
             return False
 
 
@@ -283,7 +291,7 @@ while run:
         win.blit(bg2, (0, 0))
         clock.tick(60)
         if int(time.time()) - int(game_time) == 60:
-            win.blit(screen_text("Time is Over", 50, (255, 255, 255)), (50, 250))
+            win.blit(screen_text("Time is Over", 50, (255, 255, 255)), (50, 25))
             run = False
         for evnen in pygame.event.get():
             # Проверка на выход из игры
@@ -314,7 +322,7 @@ while run:
                 en[k].drew()
                 if text and en[k].y >=500:
                     del en[k]
-                if bull_enemy[k] == 0 and (random.randint(1, 100) % 25) == 0:
+                if bull_enemy[k] == 0 and (random.randint(1, 100) % 25) == 0 and en[k].enemy_heart():
                         bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
         except IndexError:
             continue
@@ -341,7 +349,9 @@ while run:
 
         if pl.player_posittion(bonus.drew()):
             bonus.y = -15
-            pl.boom-=1
+            pl.boom -= 1
+            pl.life -= 1
+            score += 50
 
 
         if text:
