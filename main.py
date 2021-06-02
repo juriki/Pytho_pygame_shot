@@ -91,7 +91,7 @@ class Enemy:
             self.bee_fly = 1
         if not self.is_dead:
         # Проверка живойли Враг
-            if self.y != self.pos and time.time() - self.jump_time >= 0.05: # отрабатываем попадание по врагу
+            if self.y != self.pos and time.time() - self.jump_time >= 0.15: # отрабатываем попадание по врагу
                 self.y = self.pos
             self.bee_fly += 1
             self.bee = pygame.image.load(
@@ -105,13 +105,16 @@ class Enemy:
             self.bee.subsurface((0, 0, 60, 60))
             win.blit(self.bee, (self.x, self.y))
             self.y += self.speed
-            if self.is_dead_move <= 6:
+            aika = time.time() - self.jump_time
+            if self.is_dead_move <= 7 and aika > 0.2:
                 self.is_dead_move += 1
-        if self.right == True and self.is_dead_move < 6:
+            elif self.is_dead_move  == 8 and aika > 0.2:
+                self.is_dead_move = 1
+        if self.right == True and self.a_live < 8:
             self.x += self.speed
             if self.x >= 460:
                 self.right = False
-        elif self.right == False and self.is_dead_move < 6:
+        elif self.right == False and self.a_live < 8:
             self.x -= self.speed
             if self.x <= 10:
                 self.right = True
@@ -322,7 +325,7 @@ while run:
                 en[k].drew()
                 if text and en[k].y >=500:
                     del en[k]
-                if bull_enemy[k] == 0 and (random.randint(1, 100) % 25) == 0 and en[k].enemy_heart():
+                if bull_enemy[k] == 0 and (random.randint(1, 100) % 205) == 0 and en[k].enemy_heart():
                         bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
         except IndexError:
             continue
