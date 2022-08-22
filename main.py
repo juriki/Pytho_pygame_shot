@@ -19,8 +19,8 @@ text = False
 run = True
 speed = 6
 score = 0
-bull = []
-en = [0, 0, 0, 0]
+bullet = []
+enemy = [0, 0, 0, 0]
 bull_enemy = [0, 0, 0, 0, 0, 0]
 enemys_poistions = []
 i = 0
@@ -31,7 +31,7 @@ def screen_text(tekst, size=25, color=(255, 255, 255)):
     my_text = font.render(tekst, 1, color)
     return my_text
 
-win.blit(screen_text(f"{len(en)} Enemys "), (530, 10))
+win.blit(screen_text(f"{len(enemy)} Enemys "), (530, 10))
 
 
 class Enemy:
@@ -106,9 +106,9 @@ class Enemy:
             win.blit(self.bee, (self.x, self.y))
             self.y += self.speed
             aika = time.time() - self.jump_time
-            if self.is_dead_move <= 7 and aika > 0.2:
+            if self.is_dead_move <= 7 and aika > 0.1:
                 self.is_dead_move += 1
-            elif self.is_dead_move  == 8 and aika > 0.2:
+            elif self.is_dead_move  == 8 and aika > 0.1:
                 self.is_dead_move = 1
         if self.right == True and self.a_live < 8:
             self.x += self.speed
@@ -253,8 +253,8 @@ class Player:
 while i < 4:
     # Тут создаются обьекты класса "Enemy"
     print(len(enemys_poistions))
-    en[i] = Enemy(win, enemys_poistions)
-    enemys_poistions.append(en[i].enemy_posreturn())
+    enemy[i] = Enemy(win, enemys_poistions)
+    enemys_poistions.append(enemy[i].enemy_posreturn())
     i += 1
 
 bonus = bonus.Bonus(win)
@@ -312,7 +312,7 @@ while run:
             pl.player_moving(None, 10)
         if keys[pygame.K_SPACE] and time.time() - stop_time >= 0.3:
             a = Bullet(player[0], player[1])
-            bull.append(a)
+            bullet.append(a)
             stop_time = time.time()
         if keys[pygame.K_q]:
             # Выход из игры
@@ -321,12 +321,12 @@ while run:
 
         #  Рисуем  Врагов, экран и Игрока
         try:
-            for k in range(len(en)):
-                en[k].drew()
-                if text and en[k].y >=500:
-                    del en[k]
-                if bull_enemy[k] == 0 and (random.randint(1, 100) % 205) == 0 and en[k].enemy_heart():
-                        bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
+            for k in range(len(enemy)):
+                enemy[k].drew()
+                if text and enemy[k].y >=500:
+                    del enemy[k]
+                if bull_enemy[k] == 0 and (random.randint(1, 100) % 25) == 0 and enemy[k].enemy_heart():
+                        bull_enemy[k] = Bullet(enemy[k].drew()[0], enemy[k].drew()[1])
         except IndexError:
             continue
         pl.pleyer_drew()
@@ -334,7 +334,7 @@ while run:
         bonus.drew()
 
         # Полет пули врега проверка на поподание
-        if not shot_or_not(bull, en) or len(en) == 0:
+        if not shot_or_not(bullet, enemy) or len(enemy) == 0:
             win.blit(screen_text("You Win the game", 50, (250, 255, 250)), (50, 200))
             run = False
         for im in range(6):
@@ -361,7 +361,7 @@ while run:
             win.blit(screen_text(f"Time to end {67 - (int(time.time()) - int(game_time))} ", 22, (255, 255, 0)),
                      (600, 10))
             win.blit(screen_text(f"Score : {score}", 22, (255, 255, 255)), (600, 355))
-            win.blit(screen_text(f"{len(en)} Enemys ",22, (255, 0, 0)), (590, 40))
+            win.blit(screen_text(f"{len(enemy)} Enemys ", 22, (255, 0, 0)), (590, 40))
         pygame.display.update()
         if not text:
             but.Button()
