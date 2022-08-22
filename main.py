@@ -325,7 +325,8 @@ while run:
                 en[k].drew()
                 if text and en[k].y >=500:
                     del en[k]
-                if bull_enemy[k] == 0 and (random.randint(1, 100) % 205) == 0 and en[k].enemy_heart():
+                    #тут решается как часто будет стреять враг random.randint(1, 100) % 20) == 0
+                if bull_enemy[k] == 0 and (random.randint(1, 100) % 20) == 0 and en[k].enemy_heart():
                         bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
         except IndexError:
             continue
