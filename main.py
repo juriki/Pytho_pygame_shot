@@ -101,7 +101,7 @@ class Enemy:
         if self.is_dead:
         # Проверка живойли враг если подбит то тут он падает
             self.speed = 8
-            self.bee = pygame.image.load(f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/beedown/bee{str(self.is_dead_move)}.png").convert_alpha()
+            self.bee = pygame.image.load(f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/beedown/bee{str(self.is_dead_move)}d.png").convert_alpha()
             self.bee.subsurface((0, 0, 60, 60))
             win.blit(self.bee, (self.x, self.y))
             self.y += self.speed
@@ -326,7 +326,7 @@ while run:
                 if text and en[k].y >=500:
                     del en[k]
                     #тут решается как часто будет стреять враг random.randint(1, 100) % 20) == 0
-                if bull_enemy[k] == 0 and (random.randint(1, 100) % 20) == 0 and en[k].enemy_heart():
+                if bull_enemy[k] == 0 and (random.randint(1, 200) % 20) == 0 and en[k].enemy_heart():
                         bull_enemy[k] = Bullet(en[k].drew()[0], en[k].drew()[1])
         except IndexError:
             continue
