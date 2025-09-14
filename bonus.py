@@ -9,7 +9,7 @@ class Bonus:
         self.x = random.randint(10,465)
         self.y = -10
         self.bonus_start = 13
-        self.coin = pygame.image.load(f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/coin.gif").convert_alpha()
+        self.coin = pygame.image.load(f"coin.gif").convert_alpha()
         self.coin.subsurface((0, 0, 60, 60))
 
     def drew(self):

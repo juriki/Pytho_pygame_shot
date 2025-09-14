@@ -10,7 +10,7 @@ pygame.font.init()
 win_high = 800
 win_weidth = 490
 clock = pygame.time.Clock()
-bg2 = pygame.image.load("/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/trava.jpg")
+bg2 = pygame.image.load("trava.jpg")
 win = pygame.display.set_mode((win_high, win_weidth))
 line = pygame.draw.line(bg2, (255, 255, 255), [520, 0], [520, 500], 5)
 stop_time = 0
@@ -78,8 +78,7 @@ class Enemy:
             self.bum = 8
         elif self.bum == 8:
             return False
-        self.heart = pygame.image.load(
-            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/heart/sprite_{int(self.bum)}.png").convert_alpha()
+        self.heart = pygame.image.load(f"heart/sprite_{int(self.bum)}.png").convert_alpha()
         self.heart.subsurface((0, 0, 32, 32))
         win.blit(self.heart, (530, self.pos))
         return True
@@ -94,14 +93,13 @@ class Enemy:
             if self.y != self.pos and time.time() - self.jump_time >= 0.15: # отрабатываем попадание по врагу
                 self.y = self.pos
             self.bee_fly += 1
-            self.bee = pygame.image.load(
-                    f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/bee/bee{str(self.bee_fly)}.png").convert_alpha()
+            self.bee = pygame.image.load( f"bee/bee{str(self.bee_fly)}.png").convert_alpha()
             self.bee.subsurface((0, 0, 60, 60))
             win.blit(self.bee, (self.x, self.y))
         if self.is_dead:
         # Проверка живойли враг если подбит то тут он падает
             self.speed = 8
-            self.bee = pygame.image.load(f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/beedown/bee{str(self.is_dead_move)}d.png").convert_alpha()
+            self.bee = pygame.image.load(f"beedown/bee{str(self.is_dead_move)}d.png").convert_alpha()
             self.bee.subsurface((0, 0, 60, 60))
             win.blit(self.bee, (self.x, self.y))
             self.y += self.speed
@@ -150,8 +148,7 @@ class Bullet:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.seed = pygame.image.load(
-            "/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/seed.gif").convert_alpha()
+        self.seed = pygame.image.load("seed.gif").convert_alpha()
         self.seed.subsurface((0, 0, 40, 40))
 
     def shottiing(self, enemy=None):
@@ -195,8 +192,7 @@ class Player:
     def level(self):
         if self.life < 1:
             self.life = 1
-        level = pygame.image.load(
-            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/playerLevel/level{int(self.life)}.png").convert_alpha()
+        level = pygame.image.load(f"playerLevel/level{int(self.life)}.png").convert_alpha()
         level.subsurface((0, 0, 250, 250))
         win.blit(level, (538, 300))
 
@@ -204,8 +200,7 @@ class Player:
     def pleyer_drew(self):
         """Рисуем игрока"""
         self.level()
-        self.pumpkin = pygame.image.load(
-            f"/Users/jurijtokvin/PycharmProjects/pygameTest/Pytho_pygame_shot/pumpkin{str(self.file)}.png").convert_alpha()
+        self.pumpkin = pygame.image.load(f"pumpkin{str(self.file)}.png").convert_alpha()
         self.pumpkin.subsurface((0, 0, 90, 90))
         if self.boom <= 3:
             win.blit(self.pumpkin, (self.x, self.y))
@@ -246,7 +241,6 @@ class Player:
         if self.x <= position_to_kii[0]+24 and position_to_kii[0] <= self.x+50:
             if self.y >= position_to_kii[1]-50 and self.y <= position_to_kii[1]:
                 return True
-
         return False
 
 
